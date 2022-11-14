@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <link rel="icon" href="./static/favicon.png" />
+    <link rel="apple-touch-icon" href="./static/favicon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="AQI">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- w3.css -->
+    <!-- <link rel="stylesheet" href="./static/w3.css"> -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="./static/style.css">
+
+    <title>PurpleAir AQI</title>
+
+</head>
+
+<body>
+
+    <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
+        <!-- Navigation Bar -->
+        <div class="w3-round w3-bar w3-blue">
+            <button class="w3-round w3-bar-item w3-button tablink w3-bottombar w3-border-red"
+                onclick="openTab(event,'AQI')">AQI</button>
+            <button class="w3-round w3-bar-item w3-button tablink w3-bottombar w3-border-blue"
+                onclick="openTab(event,'Settings')">Settings</button>
+        </div>
+        <br>
+
+        <!-- AQI Tab -->
+        <div id="AQI" class="w3-card-4 w3-dark-grey w3-center w3-round tab">
+            <div class="w3-container w3-blue w3-center w3-round">
+                <h2 class="w3-text-white w3-center">AQI</h2>
+            </div>
+            <div class="w3-container w3-center">
+                <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
+                    <h3 id="sensor_label"></h3>
+
+                    <h3 id="sensor_result" class="w3-text-black w3-round"></h3>
+                </div>
+                <div class="w3-section">
+                    <button id='refresh' class="w3-button w3-blue w3-round">Refresh</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unused Tab -->
+        <div id="unused" class="w3-container w3-round tab"
+            style="display: none; margin-left: auto; margin-right: auto; width: 25em">
+            <div class="w3-card-4 w3-dark-grey w3-center w3-round">
+                <div class="w3-container w3-blue w3-round">
+                    <h2 class="w3-text-white w3-center  ">Control</h2>
+                </div>
+                <div class="w3-container w3-center">
+                    <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
+                        <h3 id="x_label">Label</h3>
+                        <h3 id="x_result" class="w3-text-black w3-round">Result</h3>
+                    </div>
+                    <div class="w3-section">
+                        <button class="w3-button w3-green w3-round">Accept</button>
+                        <button class="w3-button w3-red w3-round">Decline</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="Settings" class="w3-card-4 w3-dark-grey w3-round tab" style="display: none;">
+            <div class="w3-container w3-blue w3-center w3-round">
+                <h2>Purple Air</h2>
+            </div>
+            <div class="w3-container">
+                <form class="w3-container">
+                    <p>
+                        <label>Current Sensor Id</label>
+                    <p id="currentSensorId">CurrentSensorId</p>
+                    </p>
+                    <p>
+                        <label>NewSensor Id</label>
+                        <input id="saveSensorId" class="w3-input w3-round" type="text">
+                    </p>
+                </form>
+                <div class="w3-section w3-center">
+                    <button id="saveSensorBtn" class="w3-button w3-blue w3-round">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var data = {};
+            data.server = "aqi_server"
+            getAqi(data)
+            getSensorId(data)
+        });
+
+        function openTab(evt, tabName) {
+            var i, tabs, tablinks;
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-border-red", " w3-border-blue");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " w3-border-red";
+        }
+
+        function getAqi(data) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/aqi',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.aqi)
+                    result = callback.result
+                    error = result.error
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (!error) {
+                        $("#sensor_label").text(result.label)
+                        $("#sensor_result").text('AQI: ' + result.aqi);
+                        $("#sensor_result").css("background-color", result.aqiColor);
+                    } else {
+                        $("#result_label").text('Error: ' + error);
+                    }
+
+                },
+                error: function () {
+                    $("#result").html("error!");
+                }
+            });
+
+        }
+
+        $("#refresh").click(function (e) {
+            var idClicked = e.target.id;
+            console.log(idClicked)
+
+            var data = {};
+            data.server = "aqi_server"
+            getAqi(data)
+            getSensorId(data)
+
+        });
+
+        $("#saveSensorBtn").click(function (e) {
+            var idClicked = e.target.id;
+            console.log(idClicked)
+
+            var data = {};
+            // vanilla javascript method to get value by name
+            data.sensor_id = $("#saveSensorId").val()
+            data.server = "aqi_server"
+            saveSensorId(data)
+
+        });
+
+        function saveSensorId(data) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/sensor_post',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.sensor_id)
+                    result = callback.result
+                    error = result.error
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (!error) {
+                        $('#currentSensorId').text(result.sensor_id);
+                        getAqi(data) // reload aqi with new sensor_id
+                    } else {
+                        $('#currentSensorId').text('Error: ' + error);
+                    }
+                },
+                error: function () {
+                    $('#currentSensorId').html("error!");
+                }
+            });
+        }
+
+        function getSensorId(data) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/sensor',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.sensor_id)
+                    result = callback.result
+                    error = result.error
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (!error) {
+                        $("#currentSensorId").text(result.sensor_id)
+                    } else {
+                        $("#currentSensorId").text('Error: ' + error);
+                    }
+
+                },
+                error: function () {
+                    $("#currentSensorId").html("error!");
+                }
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

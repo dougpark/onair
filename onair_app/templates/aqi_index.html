@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+    <form id="name_form">
+        <label>First Name:</label><input type="text" name="first_name" />
+        <br />
+        <label>Last Name:</label><input type="text" name="last_name" />
+        <br />
+        <input type="submit" value="submit" />
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $('#name_form').submit(function (e) {
+            e.preventDefault();
+
+            var data = {};
+            var Form = this;
+
+            // jquery loop through all form data
+            // $.each(this.elements, function (i, v) {
+            //     var input = $(v);
+            //     data[input.attr("name")] = input.val();
+            //     delete data["undefined"];
+            // });
+
+            // select with vanilla js then pass it to jquery
+            // selector = document.getElementsByName('first_name');
+            // element = $(selector);
+            // data.first_name = element.val()
+
+            // vanilla javascript method to get value by name
+            data.first_name = document.getElementsByName('first_name')[0].value
+
+            // jquery method to get value by name
+            // data.first_name = $('[name=first_name]').val()
+            data.last_name = $('[name=last_name]').val()
+            data.day_week = "Friday"
+
+            console.log(data)
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/say_name',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                context: Form,
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.first_name)
+                    result = callback.result
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    $(this).text('Hello ' + result.first_name + ' ' + result.last_name + '!');
+                },
+                error: function () {
+                    $(this).html("error!");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

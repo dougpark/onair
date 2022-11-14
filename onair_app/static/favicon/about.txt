@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Limelight
+- Font Author: http://scripts.sil.org/OFL
+- Font Source: http://fonts.gstatic.com/s/limelight/v16/XLYkIZL7aopJVbZJHDuYPeNGrnY2TA.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

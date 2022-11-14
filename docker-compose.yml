@@ -1,0 +1,23 @@
+# docker-compose.yml
+version: '3'
+services:
+  flask:
+    container_name: flask
+    image: dnp-flask
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # unbuffered allows pything print() to output to the docker logs
+      PYTHONUNBUFFERED: 1
+    volumes:
+      # set local folder as app folder in the container
+      - "./:/app"
+    ports:
+      # set host port 5000 to container port 5000
+      - 5000:5000
+    working_dir: /app/onair_app
+    # start the command to run in the container
+    command: python app.py 
+    
+    

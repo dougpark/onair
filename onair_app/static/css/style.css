@@ -1,0 +1,30 @@
+body {
+ background: black;
+ color: white;
+ 
+}
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+.full-height {
+    height: 100%;
+  }
+
+.full-height-80 {
+    height: 80%;
+  }
+  
+  
+/* PurpleAir Colors
+
+000 #66e143  
+050 #ffff55
+100 #ee8533
+150 #ea3325
+200 #8c1a4b
+250 #8c1a4b
+300 #731425
+
+*/

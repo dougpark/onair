@@ -1,0 +1,5 @@
+# Example .token file
+# Copy or rename this file to .token
+# Place your codes between the single quotes
+your_switch_bot_token = '987349587329487345'
+your_switch_bot_secret = '09450983509834509'

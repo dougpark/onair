@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <!-- Required meta tags -->
+      <meta charset = "utf-8"> 
+      <meta name = "apple-mobile-web-app-capable" content = "yes" /> 
+      <meta name = "apple-mobile-web-app-status-bar-style" content = "black" /> 
+      <meta name = "apple-mobile-web-app-title" content = "OnAir"> 
+      <meta name = "viewport" content = "width=device-width, initial-scale=1, shrink-to-fit=no" >
+
+      <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+      <link rel="manifest" href="static/favicon/site.webmanifest">
+
+
+
+      <!-- w3.css -->
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <!-- Local Styles -->
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')}}" />
+
+      <title>OnAir</title>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"vintegrity = "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin = "anonymous" > </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+      <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    </head>
+
+    <body class=""> 
+        
+      <div class="w3-black full-height " style="margin-left: auto; margin-right: auto;  padding: 0"> 
+            <div id="displayMsgC" class="full-height ">
+             <div id="displayMsg" class="w3-display-middle w3-text-white w3-black w3-center" style="font-size: 10vw" >Loading...</div>            
+            </div>
+            <div id="adminPanel" class="w3-display-bottommiddle w3-padding-24" style="display: {{ adminPanel }};">
+                <div id="sessionTime" class="w3-center w3-padding-16">Time</div>
+                <div id="sessionRemaining" class="w3-center w3-padding-16">Remaining</div>
+             <button id='showMsg' class="w3-button w3-grey w3-round">On Air</button>
+             <button id='hideMsg' class="w3-button w3-grey w3-round">Stop</button>
+            </div>
+        </div>         
+    </body>
+
+</html>

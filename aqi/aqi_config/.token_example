@@ -1,0 +1,4 @@
+# Example .token file
+# Copy or rename this file to .token
+# Place your codes between the single quotes
+purpleAir_token = '9827394729347293487'
