@@ -1,5 +1,3 @@
-# Switchbot Power Meter - Plug Mini (US)
+# OnAir - a local area messaging system
 
-Use your SwitchBot token and secrete code to read your power meter, Plug Mini (US), details from the SwitchBot API
-
-* [SwitchBot API](https://github.com/OpenWonderLabs/SwitchBotAPI)
+* on air allow you to notify those around you when you need to not be disturbed.

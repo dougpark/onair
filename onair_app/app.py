@@ -5,6 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 from string import Template
 from threading import Thread
+import runthread
 
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
@@ -66,28 +67,7 @@ def strfdelta(td, fmt):
         S="{:02d}".format(int(secs)),
         )
 
-# https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/
-class PushStatus:
-	
-    def __init__(self):
-        self._running = True
-	
-    def terminate(self):
-        self._running = False
-        
-    def run(self, n):
-        while self._running:
-            pushStatus()
-            time.sleep(1)
 
-def startPushStatus():
-    pushStatus = PushStatus()
-    newThread = Thread(target = pushStatus.run, args =(0, ))
-    newThread.start()
-    return pushStatus
-    # ...
-    # Signal termination
-    # pushStatus.terminate()
 
 def pushStatus():
     payload = formatSessionStatus()
@@ -176,7 +156,7 @@ def startOnAir(newSessionLength=defaultSessionLength):
     onAir = True
     sessionLength = newSessionLength
     sessionStartTime = datetime.now()
-    pushBackground = startPushStatus()
+    pushBackground = runthread.startRunThread(pushStatus)
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
