@@ -30,7 +30,7 @@ sessionStartTime = datetime.now()
 sessionEndTime = datetime.now()
 sessionRemaining = datetime.now()
 sessionStatus = DotMap()
-sessionBackground = 0
+pushBackground = 0
 
 
 # logging configuration
@@ -67,7 +67,7 @@ def strfdelta(td, fmt):
         )
 
 # https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/
-class SendStatus:
+class PushStatus:
 	
     def __init__(self):
         self._running = True
@@ -77,20 +77,21 @@ class SendStatus:
         
     def run(self, n):
         while self._running:
-            sendStatus()
+            pushStatus()
             time.sleep(1)
 
-def startSendStatus():
-    sendStatus = SendStatus()
-    newThread = Thread(target = sendStatus.run, args =(0, ))
+def startPushStatus():
+    pushStatus = PushStatus()
+    newThread = Thread(target = pushStatus.run, args =(0, ))
     newThread.start()
-    return sendStatus
-...
-# Signal termination
-# c.terminate()
+    return pushStatus
+    # ...
+    # Signal termination
+    # pushStatus.terminate()
 
-
-
+def pushStatus():
+    payload = formatSessionStatus()
+    socketio.emit('update', payload, broadcast=True)
 
 def formatSessionStatus():
     global sessionStatus, sessionEndTime, sessionRemaining
@@ -169,13 +170,13 @@ def getrefreshFunc(data):
     emit('refreshResp', payload, broadcast=True)
 
 def startOnAir(newSessionLength=defaultSessionLength):
-    global msgStatus, onAir, sessionLength, sessionStartTime, sessionBackground
+    global msgStatus, onAir, sessionLength, sessionStartTime, pushBackground
     logging.info('showMsg called')
     msgStatus = True
     onAir = True
     sessionLength = newSessionLength
     sessionStartTime = datetime.now()
-    sessionBackground = startSendStatus()
+    pushBackground = startPushStatus()
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
@@ -189,7 +190,7 @@ def stopOnAir():
     logging.info('hideMsg called')
     msgStatus = False
     onAir = False
-    sessionBackground.terminate() 
+    pushBackground.terminate() 
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, message=sessionMessage)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
@@ -206,10 +207,6 @@ def getStatus(data):
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir,sessionLength=sessionLength, sessionMessage=sessionMessage)
     payload = formatSessionStatus()
     emit('update', payload, broadcast=True)
-
-def sendStatus():
-    payload = formatSessionStatus()
-    socketio.emit('update', payload, broadcast=True)
 
 @socketio.on('one')
 def one(data):
