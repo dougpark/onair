@@ -118,6 +118,8 @@ function initMessage() {
       dataElementC.classList.remove("w3-green")
     } else {
       dataElement.innerHTML = 'Ready'
+      dataElementT.innerHTML = ''
+      dataElementR.innerHTML = ''
       dataElement.classList.add("w3-green")
       dataElement.classList.remove("w3-red")
       dataElement.classList.remove("w3-black")

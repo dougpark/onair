@@ -30,13 +30,14 @@
         
       <div class="w3-black full-height " style="margin-left: auto; margin-right: auto;  padding: 0"> 
             <div id="displayMsgC" class="full-height ">
-             <div id="displayMsg" class="w3-display-middle w3-text-white w3-black w3-center" style="font-size: 10vw" >Loading...</div>            
-            </div>
-            <div id="adminPanel" class="w3-display-bottommiddle w3-padding-24" style="display: {{ adminPanel }};">
-                <div id="sessionTime" class="w3-center w3-padding-16">Time</div>
-                <div id="sessionRemaining" class="w3-center w3-padding-16">Remaining</div>
-             <button id='showMsg' class="w3-button w3-grey w3-round">On Air</button>
-             <button id='hideMsg' class="w3-button w3-grey w3-round">Stop</button>
+             <div id="displayMsg" class=" w3-text-white w3-black w3-center" style="font-size: 10vw" >Loading...</div>            
+             <div id="sessionTime" class="w3-center w3-padding-16" style="font-size: 6vw">Time</div>
+             <div id="sessionRemaining" class="w3-center w3-padding-16" style="font-size: 4vw">Remaining</div>
+         <div id="adminPanel" class=" w3-padding-24" style="display: {{ adminPanel }};">
+             <div class="w3-center w3-padding-16">
+                <button id='showMsg' class="w3-button w3-grey w3-round">On Air</button>
+                <button id='hideMsg' class="w3-button w3-grey w3-round">Stop</button>
+             </div>
             </div>
         </div>         
     </body>

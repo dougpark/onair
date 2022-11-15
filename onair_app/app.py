@@ -1,11 +1,9 @@
 import logging
-import time
 # https://flask-socketio.readthedocs.io/en/latest/intro.html
 from datetime import datetime
 from datetime import timedelta
-from string import Template
 from threading import Thread
-import runthread
+import dnp_util as dnp_util
 
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
@@ -41,45 +39,20 @@ logging.basicConfig(filename='./instance/server.log',
 logging.info('Started')
 logging.info('running socket_server.py')
 
-# https://stackoverflow.com/a/30536361
-class DeltaTemplate(Template):
-    delimiter = '%'
 
-# https://stackoverflow.com/a/30536361
-def strfdelta(td, fmt):
-
-    # Get the timedelta’s sign and absolute number of seconds.
-    sign = "+" if td.days < 0 else "-"
-    secs = abs(td).total_seconds()
-
-    # Break the seconds into more readable quantities.
-    days, rem = divmod(secs, 86400)  # Seconds per day: 24 * 60 * 60
-    hours, rem = divmod(rem, 3600)  # Seconds per hour: 60 * 60
-    mins, secs = divmod(rem, 60)
-
-    # Format (as per above answers) and return the result string.
-    t = DeltaTemplate(fmt)
-    return t.substitute(
-        s=sign,
-        D="{:d}".format(int(days)),
-        H="{:02d}".format(int(hours)),
-        M="{:02d}".format(int(mins)),
-        S="{:02d}".format(int(secs)),
-        )
-
-
-
+# called every n seconds to push current status to all clients
 def pushStatus():
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
 
+# update the payload with current session status
 def formatSessionStatus():
     global sessionStatus, sessionEndTime, sessionRemaining
 
     now = datetime.now()
-    sessionEndTime = sessionStartTime + timedelta(minutes=sessionLength)
+    sessionEndTime = sessionStartTime + timedelta(minutes=int(sessionLength))
     sessionRemainingO = (sessionEndTime - now)
-    sessionRemaining = strfdelta(sessionRemainingO,"%s%H:%M:%S")
+    sessionRemaining = dnp_util.strfdelta(sessionRemainingO,"%s%H:%M:%S")
 
     sessionStatus.sessionStartTime = sessionStartTime.strftime("%I:%M:%S %p")
     sessionStatus.sessionEndTime = sessionEndTime.strftime("%I:%M:%S %p")
@@ -151,12 +124,12 @@ def getrefreshFunc(data):
 
 def startOnAir(newSessionLength=defaultSessionLength):
     global msgStatus, onAir, sessionLength, sessionStartTime, pushBackground
-    logging.info('showMsg called')
+    logging.info('startOnAir called')
     msgStatus = True
     onAir = True
     sessionLength = newSessionLength
     sessionStartTime = datetime.now()
-    pushBackground = runthread.startRunThread(pushStatus)
+    pushBackground = dnp_util.start_run_thread(pushStatus)
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
