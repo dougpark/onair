@@ -1,11 +1,11 @@
 import logging
-# https://flask-socketio.readthedocs.io/en/latest/intro.html
 from datetime import datetime
 from datetime import timedelta
 from threading import Thread
 import dnp_util as dnp_util
 
 from flask import Flask, jsonify, render_template, request
+# https://flask-socketio.readthedocs.io/en/latest/intro.html
 from flask_socketio import SocketIO, emit
 
 # DotMap is a dot-access dictionary subclass
@@ -16,21 +16,22 @@ from dotmap import DotMap
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'justasecretkeythatishouldputhere'
 socketio = SocketIO(app)
+
+# Test Data
 refreshVal = 0
-msgStatus = False
+msg_status = 'no message'
 
 # OnAir Data
-defaultSessionMessage = 'On Air'
-sessionMessage = defaultSessionMessage
-onAir = False
+default_session_message = 'On Air'
+session_message = default_session_message
+onair_status = False
 default_session_length = 120
 session_length = default_session_length
 session_start_time = datetime.now()
-sessionEndTime = datetime.now()
-sessionRemaining = datetime.now()
-sessionStatus = DotMap()
-pushBackground = 0
-
+session_end_time = datetime.now()
+session_remaining = datetime.now()
+session_status = DotMap()
+broadcast_bg_thread = 0
 
 # logging configuration
 # debug, info, warning, error, critical
@@ -39,54 +40,105 @@ logging.basicConfig(filename='./instance/server.log',
 logging.info('Started')
 logging.info('running socket_server.py')
 
-
-# called every n seconds to push current status to all clients
-def push_status():
-    payload = formatSessionStatus()
-    socketio.emit('update', payload, broadcast=True)
-
 # update the payload with current session status
-def formatSessionStatus():
-    global sessionStatus, sessionEndTime, sessionRemaining
+def get_session_status():
+    global session_status, session_end_time, session_remaining
 
     now = datetime.now()
-    sessionEndTime = session_start_time + timedelta(minutes=int(session_length))
-    sessionRemainingO = (sessionEndTime - now)
-    sessionRemaining = dnp_util.strfdelta(sessionRemainingO,"%s%H:%M:%S")
+    session_end_time = session_start_time + timedelta(minutes=int(session_length))
+    sessionRemainingO = (session_end_time - now)
+    session_remaining = dnp_util.strfdelta(sessionRemainingO,"%s%H:%M:%S")
 
-    sessionStatus.sessionStartTime = session_start_time.strftime("%I:%M:%S %p")
-    sessionStatus.sessionEndTime = sessionEndTime.strftime("%I:%M:%S %p")
-    sessionStatus.sessionRemaining = sessionRemaining
+    session_status.sessionStartTime = session_start_time.strftime("%I:%M:%S %p")
+    session_status.sessionEndTime = session_end_time.strftime("%I:%M:%S %p")
+    session_status.sessionRemaining = session_remaining
 
-    sessionStatus.data = 'ok'
-    sessionStatus.onAir=onAir
-    sessionStatus.sessionMessage=sessionMessage
-    sessionStatus.sessionLength=session_length
-    sessionStatus.sessionNow=now.strftime("%I:%M:%S %p")
+    session_status.data = 'ok'
+    session_status.onAir=onair_status
+    session_status.sessionMessage=session_message
+    session_status.sessionLength=session_length
+    session_status.sessionNow=now.strftime("%I:%M:%S %p")
     
     # print(sessionStatus)
-    return sessionStatus.toDict()
+    return session_status.toDict()
 
+# process the start-session request, resets time-remaining timer
+def start_onair_session(new_session_length=default_session_length):
+    global onair_status, session_length, session_start_time, broadcast_bg_thread
+    logging.info('start_onair_session called')
+    onair_status = True
+    session_length = new_session_length
+    session_start_time = datetime.now()
+    broadcast_bg_thread = dnp_util.start_background_thread(1, broadcast_status)
+    payload = get_session_status()
+    socketio.emit('update', payload, broadcast=True)
 
+# process the stop-session request
+def stop_onair_session():
+    global onair_status
+    logging.info('stop_onair_session called')
+    onair_status = False
+    broadcast_bg_thread.terminate() 
+    payload = get_session_status()
+    socketio.emit('update', payload, broadcast=True)
+    return 
+
+# called every n seconds to push current status to all clients
+def broadcast_status():
+    payload = get_session_status()
+    socketio.emit('update', payload, broadcast=True)
+
+# return normal view-only page
 @app.route('/')
 def index():
     return render_template('index.html',adminPanel='none', date=datetime.now())
 
+# return page with admin panel
 @app.route('/admin')
 def admin():
     return render_template('index.html',adminPanel='block', date=datetime.now())
 
-@app.route('/on')
-def on():
-    newSessionLength = request.args.get('sessionLength', default=default_session_length)
-    startOnAir(newSessionLength)
-    return jsonify(dict(success=True, message='On', sessionLength=newSessionLength))
+# api to start the session
+# can set sessionLength in minutes
+# ex. https://server/start?sessionlength=90
+@app.route('/start')
+def route_start():
+    new_session_length = request.args.get('sessionLength', default=default_session_length)
+    start_onair_session(new_session_length)
+    return jsonify(dict(success=True, message='start', sessionLength=new_session_length))
 
-@app.route('/off')
-def off():
-    stopOnAir()
-    return jsonify(dict(success=True, message='Off'))
+# api to stop the session
+# ex. https://server/stop
+@app.route('/stop')
+def route_stop():
+    stop_onair_session()
+    return jsonify(dict(success=True, message='stop'))
 
+# responds to button click to start a new session
+@socketio.on('startSession')
+def start_session(data):
+    start_onair_session()
+
+# responds to button click to stop the session
+@socketio.on('stopSession')
+def stop_session(data):
+    stop_onair_session()
+
+# process the getstatus request, does not change status
+@socketio.on('getstatus')
+def get_status(data):
+    logging.info('getStatus called')
+    payload = get_session_status()
+    emit('update', payload, broadcast=True)
+
+# process connection request
+@socketio.on('connect')
+def on_connect():
+    logging.info('on_connect called')
+    payload = dict(data='Connection ack from server')
+    emit('connectResp', payload)
+
+# not used
 @app.route('/api')
 def api():
     logging.info('api called')
@@ -94,75 +146,16 @@ def api():
     socketio.emit('log', dict(data=str(query)), broadcast=True)
     return jsonify(dict(success=True, message='Received'))
 
+# start a session from a route
+# best to use /start
 @app.route('/onair')
-def onair():
+def route_onair():
     logging.info('onair called')
     query = dict(request.args)
-    # socketio.emit('log', dict(data=str(query)), broadcast=True)
-    global msgStatus, onAir
-    msgStatus = True
-    onAir = True
-    # payload = dict(data='ok', messageStatus=msgStatus, onAir=onAir, sessionMessage=sessionMessage)
-    payload = formatSessionStatus()
-    socketio.emit('update', payload, broadcast=True)
+    start_onair_session()
     return render_template('index.html',date=datetime.now())
 
-
-@socketio.on('refresh')
-def refreshFunc(data):
-    global refreshVal
-    logging.info('refresh called')
-    refreshVal = refreshVal + 1
-    payload = dict(data=refreshVal, messageStatus=msgStatus, message=sessionMessage)
-    emit('refreshResp', payload, broadcast=True)
-
-@socketio.on('getrefresh')
-def getrefreshFunc(data):
-    logging.info('getrefresh called')
-    payload = dict(data=refreshVal, messageStatus=msgStatus, onAir=onAir, message=sessionMessage)
-    emit('refreshResp', payload, broadcast=True)
-
-# starts a new session, resets countdown timer
-def startOnAir(new_session_length=default_session_length):
-    global msgStatus, onAir, session_length, session_start_time, pushBackground
-    logging.info('startOnAir called')
-    msgStatus = True
-    onAir = True
-    session_length = new_session_length
-    session_start_time = datetime.now()
-    pushBackground = dnp_util.start_background_thread(push_status)
-    # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
-    payload = formatSessionStatus()
-    socketio.emit('update', payload, broadcast=True)
-
-# responds to button click and starts a new session
-@socketio.on('showmsg')
-def showMsgNow(data):
-    startOnAir()
-
-def stopOnAir():
-    global msgStatus, onAir
-    logging.info('hideMsg called')
-    msgStatus = False
-    onAir = False
-    pushBackground.terminate() 
-    # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, message=sessionMessage)
-    payload = formatSessionStatus()
-    socketio.emit('update', payload, broadcast=True)
-    return 
-
-@socketio.on('hidemsg')
-def hideMsgNow(data):
-    stopOnAir()
-    
-
-@socketio.on('getstatus')
-def getStatus(data):
-    logging.info('getStatus called')
-    # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir,sessionLength=sessionLength, sessionMessage=sessionMessage)
-    payload = formatSessionStatus()
-    emit('update', payload, broadcast=True)
-
+# not used
 @socketio.on('one')
 def one(data):
     logging.info('one called')
@@ -170,6 +163,7 @@ def one(data):
     payload = dict(data='This response is from one')
     emit('oneResp', payload)
 
+# not used
 @socketio.on('mirror')
 def mirror(data):
     logging.info('mirror called')
@@ -177,11 +171,21 @@ def mirror(data):
     payload = data
     emit('mirrorResp', payload)
 
-@socketio.on('connect')
-def on_connect():
-    logging.info('connected called')
-    payload = dict(data='Connection ack from server')
-    emit('connectResp', payload)
+# used for testing
+@socketio.on('refresh')
+def refreshFunc(data):
+    global refreshVal
+    logging.info('refresh called')
+    refreshVal = refreshVal + 1
+    payload = dict(data=refreshVal, messageStatus=msg_status, message=session_message)
+    emit('refreshResp', payload, broadcast=True)
+
+# not used
+@socketio.on('getrefresh')
+def getrefreshFunc(data):
+    logging.info('getrefresh called')
+    payload = dict(data=refreshVal, messageStatus=msg_status, onAir=onair_status, message=session_message)
+    emit('refreshResp', payload, broadcast=True)
 
 if __name__ == '__main__':
     # allow_unsafe_werkzeug=True - allows flask to run in docker container as production. Not safe.

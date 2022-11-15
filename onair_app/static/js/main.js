@@ -72,26 +72,26 @@ function initRefresh() {
 }
 
 function initMessage() {
-  $("#showMsg").click(function (e) {
+  $("#startSession").click(function (e) {
     var idClicked = e.target.id;
     console.log(idClicked)
-    showMsg()
+    startSession()
   });
 
-  function showMsg() {
-    console.log('sending showMsg to server:')
-    socket.emit('showmsg', {data: 'showMsg sent from client'})
+  function startSession() {
+    console.log('sending startSession to server:')
+    socket.emit('startSession', {data: 'startSession sent from client'})
   }
 
-  $("#hideMsg").click(function (e) {
+  $("#stopSession").click(function (e) {
     var idClicked = e.target.id;
     console.log(idClicked)
-    hideMsg()
+    stopSession()
   });
 
-  function hideMsg() {
-    console.log('sending hideMsg to server:')
-    socket.emit('hidemsg', {data: 'hideMsg sent from client'})
+  function stopSession() {
+    console.log('sending stopSession to server:')
+    socket.emit('stopSession', {data: 'stopSession sent from client'})
   }
 
   socket.on('update', function (payload) {

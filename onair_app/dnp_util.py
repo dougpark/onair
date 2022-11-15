@@ -16,9 +16,9 @@ class BackgroundThread:
             run_function()
             time.sleep(sleep_time)
 
-def start_background_thread(run_function):
+def start_background_thread(sleep_time, run_function):
     background_thread = BackgroundThread()
-    new_thread = Thread(target = background_thread.run, args =(1, run_function))
+    new_thread = Thread(target = background_thread.run, args =(sleep_time, run_function))
     new_thread.start()
     return background_thread
     # ...
