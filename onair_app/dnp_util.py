@@ -3,7 +3,7 @@ import time
 from string import Template
 
 # https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/
-class RunThread:
+class BackgroundThread:
 	
     def __init__(self):
         self._running = True
@@ -16,14 +16,14 @@ class RunThread:
             run_function()
             time.sleep(sleep_time)
 
-def start_run_thread(run_function):
-    run_thread = RunThread()
-    new_thread = Thread(target = run_thread.run, args =(1, run_function))
+def start_background_thread(run_function):
+    background_thread = BackgroundThread()
+    new_thread = Thread(target = background_thread.run, args =(1, run_function))
     new_thread.start()
-    return run_thread
+    return background_thread
     # ...
     # Signal termination
-    # run_thread.terminate()
+    # background_thread.terminate()
 
 
 

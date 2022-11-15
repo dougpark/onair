@@ -23,9 +23,9 @@ msgStatus = False
 defaultSessionMessage = 'On Air'
 sessionMessage = defaultSessionMessage
 onAir = False
-defaultSessionLength = 120
-sessionLength = defaultSessionLength
-sessionStartTime = datetime.now()
+default_session_length = 120
+session_length = default_session_length
+session_start_time = datetime.now()
 sessionEndTime = datetime.now()
 sessionRemaining = datetime.now()
 sessionStatus = DotMap()
@@ -41,7 +41,7 @@ logging.info('running socket_server.py')
 
 
 # called every n seconds to push current status to all clients
-def pushStatus():
+def push_status():
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
 
@@ -50,18 +50,18 @@ def formatSessionStatus():
     global sessionStatus, sessionEndTime, sessionRemaining
 
     now = datetime.now()
-    sessionEndTime = sessionStartTime + timedelta(minutes=int(sessionLength))
+    sessionEndTime = session_start_time + timedelta(minutes=int(session_length))
     sessionRemainingO = (sessionEndTime - now)
     sessionRemaining = dnp_util.strfdelta(sessionRemainingO,"%s%H:%M:%S")
 
-    sessionStatus.sessionStartTime = sessionStartTime.strftime("%I:%M:%S %p")
+    sessionStatus.sessionStartTime = session_start_time.strftime("%I:%M:%S %p")
     sessionStatus.sessionEndTime = sessionEndTime.strftime("%I:%M:%S %p")
     sessionStatus.sessionRemaining = sessionRemaining
 
     sessionStatus.data = 'ok'
     sessionStatus.onAir=onAir
     sessionStatus.sessionMessage=sessionMessage
-    sessionStatus.sessionLength=sessionLength
+    sessionStatus.sessionLength=session_length
     sessionStatus.sessionNow=now.strftime("%I:%M:%S %p")
     
     # print(sessionStatus)
@@ -78,7 +78,7 @@ def admin():
 
 @app.route('/on')
 def on():
-    newSessionLength = request.args.get('sessionLength', default=defaultSessionLength)
+    newSessionLength = request.args.get('sessionLength', default=default_session_length)
     startOnAir(newSessionLength)
     return jsonify(dict(success=True, message='On', sessionLength=newSessionLength))
 
@@ -122,18 +122,20 @@ def getrefreshFunc(data):
     payload = dict(data=refreshVal, messageStatus=msgStatus, onAir=onAir, message=sessionMessage)
     emit('refreshResp', payload, broadcast=True)
 
-def startOnAir(newSessionLength=defaultSessionLength):
-    global msgStatus, onAir, sessionLength, sessionStartTime, pushBackground
+# starts a new session, resets countdown timer
+def startOnAir(new_session_length=default_session_length):
+    global msgStatus, onAir, session_length, session_start_time, pushBackground
     logging.info('startOnAir called')
     msgStatus = True
     onAir = True
-    sessionLength = newSessionLength
-    sessionStartTime = datetime.now()
-    pushBackground = dnp_util.start_run_thread(pushStatus)
+    session_length = new_session_length
+    session_start_time = datetime.now()
+    pushBackground = dnp_util.start_background_thread(push_status)
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
 
+# responds to button click and starts a new session
 @socketio.on('showmsg')
 def showMsgNow(data):
     startOnAir()
