@@ -127,8 +127,8 @@ function initMessage() {
     // loggerElement.appendChild(dataElement)
   })
 
-  socket.emit('getrefresh', {data: 'getRefresh sent from client'})
-  socket.emit('getmsg', {data: 'getMsg sent from client'})
+  // socket.emit('getrefresh', {data: 'getRefresh sent from client'})
+  socket.emit('getstatus', {data: 'getStatus sent from client'})
 }
 
 

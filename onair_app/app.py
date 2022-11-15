@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from datetime import timedelta
 from string import Template
+from threading import Thread
 
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
@@ -29,6 +30,7 @@ sessionStartTime = datetime.now()
 sessionEndTime = datetime.now()
 sessionRemaining = datetime.now()
 sessionStatus = DotMap()
+sessionBackground = 0
 
 
 # logging configuration
@@ -38,6 +40,7 @@ logging.basicConfig(filename='./instance/server.log',
 logging.info('Started')
 logging.info('running socket_server.py')
 
+# https://stackoverflow.com/a/30536361
 class DeltaTemplate(Template):
     delimiter = '%'
 
@@ -63,13 +66,38 @@ def strfdelta(td, fmt):
         S="{:02d}".format(int(secs)),
         )
 
+# https://www.geeksforgeeks.org/start-and-stop-a-thread-in-python/
+class SendStatus:
+	
+    def __init__(self):
+        self._running = True
+	
+    def terminate(self):
+        self._running = False
+        
+    def run(self, n):
+        while self._running:
+            sendStatus()
+            time.sleep(1)
+
+def startSendStatus():
+    sendStatus = SendStatus()
+    newThread = Thread(target = sendStatus.run, args =(0, ))
+    newThread.start()
+    return sendStatus
+...
+# Signal termination
+# c.terminate()
+
+
+
+
 def formatSessionStatus():
     global sessionStatus, sessionEndTime, sessionRemaining
 
     now = datetime.now()
     sessionEndTime = sessionStartTime + timedelta(minutes=sessionLength)
     sessionRemainingO = (sessionEndTime - now)
-    print(sessionRemainingO)
     sessionRemaining = strfdelta(sessionRemainingO,"%s%H:%M:%S")
 
     sessionStatus.sessionStartTime = sessionStartTime.strftime("%I:%M:%S %p")
@@ -77,13 +105,12 @@ def formatSessionStatus():
     sessionStatus.sessionRemaining = sessionRemaining
 
     sessionStatus.data = 'ok'
-    # sessionStatus.messageStatus=msgStatus
     sessionStatus.onAir=onAir
     sessionStatus.sessionMessage=sessionMessage
     sessionStatus.sessionLength=sessionLength
     sessionStatus.sessionNow=now.strftime("%I:%M:%S %p")
     
-    print(sessionStatus)
+    # print(sessionStatus)
     return sessionStatus.toDict()
 
 
@@ -142,12 +169,13 @@ def getrefreshFunc(data):
     emit('refreshResp', payload, broadcast=True)
 
 def startOnAir(newSessionLength=defaultSessionLength):
-    global msgStatus, onAir, sessionLength, sessionStartTime
+    global msgStatus, onAir, sessionLength, sessionStartTime, sessionBackground
     logging.info('showMsg called')
     msgStatus = True
     onAir = True
     sessionLength = newSessionLength
     sessionStartTime = datetime.now()
+    sessionBackground = startSendStatus()
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, sessionMessage=sessionMessage,sessionLength=sessionLength)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
@@ -161,6 +189,7 @@ def stopOnAir():
     logging.info('hideMsg called')
     msgStatus = False
     onAir = False
+    sessionBackground.terminate() 
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir, message=sessionMessage)
     payload = formatSessionStatus()
     socketio.emit('update', payload, broadcast=True)
@@ -171,12 +200,16 @@ def hideMsgNow(data):
     stopOnAir()
     
 
-@socketio.on('getmsg')
-def getMsg(data):
-    logging.info('getMsg called')
+@socketio.on('getstatus')
+def getStatus(data):
+    logging.info('getStatus called')
     # payload = dict(data='ok', messageStatus=msgStatus,onAir=onAir,sessionLength=sessionLength, sessionMessage=sessionMessage)
     payload = formatSessionStatus()
     emit('update', payload, broadcast=True)
+
+def sendStatus():
+    payload = formatSessionStatus()
+    socketio.emit('update', payload, broadcast=True)
 
 @socketio.on('one')
 def one(data):
