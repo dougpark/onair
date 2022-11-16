@@ -127,10 +127,10 @@
 
 # Possible Modifications and Upgrades
 * Pull in data from other API's
--- Current Temperature
--- Current Air Quality
--- Current status of smart home devices
--- Forcast and other weather info
+    - Current Temperature
+    - Current Air Quality
+    - Current status of smart home devices
+    - Forcast and other weather info
 * Clock
 * Calendar
 * Multi-session mode with user authentication
