@@ -123,6 +123,23 @@ def route_stop():
     stop_onair_session()
     return jsonify(dict(success=True, message='stop'))
 
+# api to return session status
+# ex. https://server/status
+@app.route('/status')
+def route_status():
+    if (onair_status == True):
+        msg = default_session_message
+    else:
+        msg = default_standby_message
+    return msg
+
+# api to return session status in json format
+# ex. https://server/json
+@app.route('/json')
+def route_json():
+    msg = get_session_status()
+    return jsonify(msg)
+
 # responds to button click to start a new session
 @socketio.on('startSession')
 def start_session(data):
