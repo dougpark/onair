@@ -13,7 +13,7 @@
 * When you just *##^$ just want to be left alone
 
 ## Live Demo
-* Check out onair.64zbit.com/admin
+* Check out [64zbit.com:5000/admin]()
 * There's only one session so others may interrupt you
 
 ## Technical Details
@@ -23,13 +23,13 @@
 
 ## Default view 
 * Share this view with family and coworkers
-* Ex. onair.local:5000
+* Ex. onair.local
 * Displays the standby and session messages
 * During a session the current time and session remaining time are displayed
 
 ## Admin panel
 * This url allows you to start and stop the session through the web interface
-* Ex. onair.local:5000/admin
+* Ex. onair.local/admin
 * A stop and start button are displayed on the screen
 
 ## Defaults
@@ -88,9 +88,9 @@
 
 ## Server Installaton
 * Raspberry Pi
--- TBD
+    * TBD
 * Docker
--- TBD
+    * TBD
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
@@ -112,6 +112,7 @@
 
 ## macOS and One Thing
 * [One Thing](https://apps.apple.com/us/app/one-thing/id1604176982?mt=12)
+* TBD example bash file
 * Displays current session message on your menu bar
 * Does not push to your client
 * But you can poll frequently in your script for current status
