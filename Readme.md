@@ -104,6 +104,10 @@
 * [https://onair.64zbit.com/start?standby=Available](https://onair.64zbit.com/start?standby=Available)
 * start and set all 3
 * [https://onair.64zbit.com/start?duration=60&message=Busy&standby=Available](https://onair.64zbit.com/start?duration=60&message=Busy&standby=Available)
+* get the current status
+* [https://onair.64zbit.com/status](https://onair.64zbit.com/status)
+* get the full json current status
+* [https://onair.64zbit.com/json](https://onair.64zbit.com/json)
 
 ## Server Installaton
 * Download onair
