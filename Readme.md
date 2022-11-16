@@ -13,7 +13,7 @@
 * When you just *##^$ just want to be left alone
 
 ## Live Demo
-* Check out [64zbit.com:5000/admin]()
+* Check out [http://64zbit.com:5000/admin](http://64zbit.com:5000/admin)
 * There's only one session so others may interrupt you
 
 ## Technical Details
@@ -106,6 +106,8 @@
     * ```docker-compose up -d```
     * on first run it will download all required files
     * to stop the onair server type ```docker-compose down```
+    * now open a browser and go to your url port 500 /admin
+    * Ex. 64zbit.com:5000/admin
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
@@ -115,9 +117,11 @@
 
 ## Start the server in production mode with Docker
 * in a bash or zsh terminal
-* cd onair
-* docker-compose up -d
-* to stop docker-compose down
+* to start
+* ```cd onair```
+* ```docker-compose up -d```
+* to stop 
+* ```docker-compose down```
 
 ## Client Installation
 * Any client that can run a browser
