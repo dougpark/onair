@@ -90,6 +90,21 @@
 * If True than other info is acurate at the time of response
 ```
 
+## Example API Shortcuts or bookmarks
+* These return json acknoledgments, you still have to click one of the above to see it work
+* start the session 
+* [(https://onair.64zbit.com/start](https://onair.64zbit.com/start)
+* stop the session
+* [https://onair.64zbit.com/stop](https://onair.64zbit.com/stop)
+* start and set duration to 60 minutes
+* [https://onair.64zbit.com/start?duration=60](https://onair.64zbit.com/start?duration=60)
+* start and set onair message to Busy
+* [https://onair.64zbit.com/start?message=Busy](https://onair.64zbit.com/start?message=Busy)
+* start and set standby message to Available
+* [https://onair.64zbit.com/start?standby=Available](https://onair.64zbit.com/start?standby=Available)
+* start and set all 3
+* [https://onair.64zbit.com/start?duration=60&message=Busy&standby=Available](https://onair.64zbit.com/start?duration=60&message=Busy&standby=Available)
+
 ## Server Installaton
 * Download onair
     * Browse to [github/onair](https://github.com/dougpark/onair)
