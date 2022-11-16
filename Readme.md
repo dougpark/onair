@@ -13,13 +13,16 @@
 * When you just *##^$ just want to be left alone
 
 ## Live Demo
-* Check out [http://64zbit.com:5000/admin](http://64zbit.com:5000/admin)
+* Check out 
+* admin view [http://64zbit.com:5000/admin](http://64zbit.com:5000/admin)
+* client view [http://64zbit.com:5000](http://64zbit.com:5000)
 * There's only one session so others may interrupt you
+* The server is in the America/Chicago timezone
 
 ## Technical Details
 * Works great on a Raspberry Pi
 * Works great on any platform that can run a Docker container
-* Written in Python with the Flask Server and Socket.io
+* Written in Python 3 with the Flask Server and Socket.io
 
 ## Default view 
 * Share this view with family and coworkers
@@ -52,7 +55,7 @@
 
 ### Start the session
 ```
-* Ex. onair.local:5000/start?duration=60&message=Busy&standby=Available
+* Ex. [http://64zbit.com:5000/start?duration=60&message=Busy&standby=Available](http://64zbit.com:5000/start?duration=60&message=Busy&standby=Available)
 * onair.local:5000              :your server name and port
 * /start                        :is the route to start the session
 * ?duration=60                  :sets the session duration to 60 minutes
@@ -62,17 +65,18 @@
 
 ### Stop the session
 ```
-* Ex. onair.local:5000/stop
+* Ex. [http://64zbit.com:5000/stop](http://64zbit.com:5000/stop)
 * Your server name and port     :onair.local:5000
 * /stop                         :is the route to stop the session
 ```
 
 ### Status the session
 ```
-* Ex. onair.local:5000/status
+* Ex. [http://64zbit.com:5000/status](http://64zbit.com:5000/status)
 * /status                       :is the route to get a text based status of the system
 * Returns a string of the current status
 * Easy to parse on MacOS and display in your menubar with a script and One Thing
+* See the included onairstatus.sh bash script
 ```
 
 ### Status the session with json
@@ -106,14 +110,17 @@
     * ```docker-compose up -d```
     * on first run it will download all required files
     * to stop the onair server type ```docker-compose down```
-    * now open a browser and go to your url port 500 /admin
+    * now open a browser and go to your url port 5000/admin
     * Ex. 64zbit.com:5000/admin
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
-* cd onair
-* ./start_server.sh 
-* to stop press control-c
+* ```cd onair```
+* *create python virtual environment*
+* *source into the virtual environment*
+* *pip to download all requied libraries*
+* ```./start_server.sh```
+* to stop press ```control-c```
 
 ## Start the server in production mode with Docker
 * in a bash or zsh terminal
