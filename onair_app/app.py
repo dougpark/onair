@@ -23,15 +23,16 @@ msg_status = 'no message'
 
 # OnAir Data
 default_session_message = 'On Air'
-session_message = default_session_message
+default_standby_message = 'Stand By'
+default_session_duration = 120
+default_session_color = 'red'
+default_standby_color = 'green'
 onair_status = False
-default_session_length = 120
-session_length = default_session_length
 session_start_time = datetime.now()
-session_end_time = datetime.now()
-session_remaining = datetime.now()
+session_end_time = None
+session_remaining = None
 session_status = DotMap()
-broadcast_bg_thread = 0
+broadcast_bg_thread = None
 
 # logging configuration
 # debug, info, warning, error, critical
@@ -45,7 +46,7 @@ def get_session_status():
     global session_status, session_end_time, session_remaining
 
     now = datetime.now()
-    session_end_time = session_start_time + timedelta(minutes=int(session_length))
+    session_end_time = session_start_time + timedelta(minutes=int(default_session_duration))
     sessionRemainingO = (session_end_time - now)
     session_remaining = dnp_util.strfdelta(sessionRemainingO,"%s%H:%M:%S")
 
@@ -53,21 +54,22 @@ def get_session_status():
     session_status.sessionEndTime = session_end_time.strftime("%I:%M:%S %p")
     session_status.sessionRemaining = session_remaining
 
-    session_status.data = 'ok'
-    session_status.onAir=onair_status
-    session_status.sessionMessage=session_message
-    session_status.sessionLength=session_length
-    session_status.sessionNow=now.strftime("%I:%M:%S %p")
+    session_status.standByMessage = default_standby_message
+    session_status.onAir = onair_status
+    session_status.sessionMessage = default_session_message
+    session_status.sessionDuration = default_session_duration
+    session_status.sessionNow = now.strftime("%I:%M:%S %p")
+    session_status.sessionColor = default_session_color
+    session_status.standByColor = default_standby_color
     
     # print(sessionStatus)
     return session_status.toDict()
 
 # process the start-session request, resets time-remaining timer
-def start_onair_session(new_session_length=default_session_length):
-    global onair_status, session_length, session_start_time, broadcast_bg_thread
+def start_onair_session():
+    global onair_status, session_start_time, broadcast_bg_thread
     logging.info('start_onair_session called')
     onair_status = True
-    session_length = new_session_length
     session_start_time = datetime.now()
     broadcast_bg_thread = dnp_util.start_background_thread(1, broadcast_status)
     payload = get_session_status()
@@ -103,9 +105,16 @@ def admin():
 # ex. https://server/start?sessionlength=90
 @app.route('/start')
 def route_start():
-    new_session_length = request.args.get('sessionLength', default=default_session_length)
-    start_onair_session(new_session_length)
-    return jsonify(dict(success=True, message='start', sessionLength=new_session_length))
+    global default_session_message, default_standby_message, default_session_duration
+    default_session_message = request.args.get('message', default=default_session_message)
+    default_standby_message = request.args.get('standby', default=default_standby_message)
+    default_session_duration = request.args.get('duration', default=default_session_duration)
+
+    start_onair_session()
+    return jsonify(dict(success=True, message='start', 
+        sessionMessage=default_session_message,
+        sessionStandby=default_standby_message,
+        sessionDuration=default_session_duration))
 
 # api to stop the session
 # ex. https://server/stop
@@ -177,14 +186,14 @@ def refreshFunc(data):
     global refreshVal
     logging.info('refresh called')
     refreshVal = refreshVal + 1
-    payload = dict(data=refreshVal, messageStatus=msg_status, message=session_message)
+    payload = dict(data=refreshVal, messageStatus=msg_status, message=default_session_message)
     emit('refreshResp', payload, broadcast=True)
 
 # not used
 @socketio.on('getrefresh')
 def getrefreshFunc(data):
     logging.info('getrefresh called')
-    payload = dict(data=refreshVal, messageStatus=msg_status, onAir=onair_status, message=session_message)
+    payload = dict(data=refreshVal, messageStatus=msg_status, onAir=onair_status, message=default_session_message)
     emit('refreshResp', payload, broadcast=True)
 
 if __name__ == '__main__':

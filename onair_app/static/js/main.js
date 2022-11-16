@@ -117,7 +117,7 @@ function initMessage() {
       dataElementC.classList.add("w3-red")
       dataElementC.classList.remove("w3-green")
     } else {
-      dataElement.innerHTML = 'Ready'
+      dataElement.innerHTML = payload.standByMessage
       dataElementT.innerHTML = ''
       dataElementR.innerHTML = ''
       dataElement.classList.add("w3-green")

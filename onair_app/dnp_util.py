@@ -21,16 +21,21 @@ def start_background_thread(sleep_time, run_function):
     new_thread = Thread(target = background_thread.run, args =(sleep_time, run_function))
     new_thread.start()
     return background_thread
-    # ...
+    # Usage:
+    # import dnp_util as dnp_util
+    # 1 = sleep 1 second between activations
+    # broadcast_status = name of funtion to run every loop
+    # background_thread = start_background_thread(1, broadcast_status)
     # Signal termination
     # background_thread.terminate()
 
 
 
-    # https://stackoverflow.com/a/30536361
+# https://stackoverflow.com/a/30536361
 class DeltaTemplate(Template):
     delimiter = '%'
 
+# util to format a delta time object
 # https://stackoverflow.com/a/30536361
 def strfdelta(td, fmt):
 
