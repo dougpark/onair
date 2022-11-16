@@ -100,8 +100,12 @@
 * Docker
     * [Install Docker](https://docs.docker.com/engine/install/)
     * Open a terminal window
-    * cd onair
-    * docker-compose up -d
+    * cd to the onair folder
+    * ```cd onair```
+    * start docker
+    * ```docker-compose up -d```
+    * on first run it will download all required files
+    * to stop the onair server type ```docker-compose down```
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
