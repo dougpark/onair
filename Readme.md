@@ -87,10 +87,21 @@
 ```
 
 ## Server Installaton
+* Download onair
+    * Browse to [github/onair](https://github.com/dougpark/onair)
+    * Click the big green Code button
+    * Click the download ZIP button
+    * Expand and move the onair folder to your local computer
+    * or
+    * Download with git
+    * [Clone a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 * Raspberry Pi
     * TBD
 * Docker
-    * TBD
+    * [Install Docker](https://docs.docker.com/engine/install/)
+    * Open a terminal window
+    * cd onair
+    * docker-compose up -d
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
@@ -111,11 +122,14 @@
 * Works great on iOS when you 'Add to Home Screen'
 
 ## macOS and One Thing
+* One Thing allows you to display one thing in the macOS menu bar
 * [One Thing](https://apps.apple.com/us/app/one-thing/id1604176982?mt=12)
-* TBD example bash file
+* See the included onairstatus.sh for an example
 * Displays current session message on your menu bar
 * Does not push to your client
 * But you can poll frequently in your script for current status
+* Can use Lingon X to schedule cron jobs on macOS, for example every 30 seconds
+* [Lingon X](https://www.peterborgapps.com/lingon/)
 
 ## macOS/iOS and shortcuts
 * Create a series of shortcuts with your favorite messages and durations
