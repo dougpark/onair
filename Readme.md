@@ -21,18 +21,18 @@
 * Works great on any platform that can run a Docker container
 * Written in Python with the Flask Server and Socket.io
 
-# Default view 
+## Default view 
 * Share this view with family and coworkers
 * Ex. onair.local:5000
 * Displays the standby and session messages
 * During a session the current time and session remaining time are displayed
 
-# Admin panel
+## Admin panel
 * This url allows you to start and stop the session through the web interface
 * Ex. onair.local:5000/admin
 * A stop and start button are displayed on the screen
 
-# Defaults
+## Defaults
 ```
 * Here are the default time and messages which can be overridden with the api
 * duration                      :120 minutes
@@ -41,16 +41,16 @@
 * You can change these defaults by editing /onair_app/app.py
 ```
 
-# Duration
+## Duration
 * The session screen shows the current time and the remaining time
 * The remaining time is set from the duration tag
 * All it does is count down, and then counts up once it reaches zero
 * It is there just as a reminder to wind things up
 
-# API
+## API
 * To make it easy to integerate with other workflows there is a simple api
 
-## Start the session
+### Start the session
 ```
 * Ex. onair.local:5000/start?duration=60&message=Busy&standby=Available
 * onair.local:5000              :your server name and port
@@ -60,14 +60,14 @@
 * &standby=Available            :sets the message when the session ends
 ```
 
-## Stop the session
+### Stop the session
 ```
 * Ex. onair.local:5000/stop
 * Your server name and port     :onair.local:5000
 * /stop                         :is the route to stop the session
 ```
 
-## Status the session
+### Status the session
 ```
 * Ex. onair.local:5000/status
 * /status                       :is the route to get a text based status of the system
@@ -75,7 +75,7 @@
 * Easy to parse on MacOS and display in your menubar with a script and One Thing
 ```
 
-## Status the session with json
+### Status the session with json
 ```
 * Ex. onair.local:5000/json
 * /json                         : is the route to get the full json status of the system
@@ -86,46 +86,46 @@
 * If True than other info is acurate at the time of response
 ```
 
-# Server Installaton
+## Server Installaton
 * Raspberry Pi
 -- TBD
 * Docker
 -- TBD
 
-# Start the server in developer mode
+## Start the server in developer mode
 * in a bash or zsh terminal
 * cd onair
 * ./start_server.sh 
 * to stop press control-c
 
-# Start the server in production mode with Docker
+## Start the server in production mode with Docker
 * in a bash or zsh terminal
 * cd onair
 * docker-compose up -d
 * to stop docker-compose down
 
-# Client Installation
+## Client Installation
 * Any client that can run a browser
 * Works great in a "browser as an app" like [Unite](https://www.bzgapps.com/unite)
 * A small Raspberry Pi with a built in touchscreen monitor works great as a table top display
 * Works great on iOS when you 'Add to Home Screen'
 
-# macOS and One Thing
+## macOS and One Thing
 * [One Thing](https://apps.apple.com/us/app/one-thing/id1604176982?mt=12)
 * Displays current session message on your menu bar
 * Does not push to your client
 * But you can poll frequently in your script for current status
 
-# macOS/iOS and shortcuts
+## macOS/iOS and shortcuts
 * Create a series of shortcuts with your favorite messages and durations
 
-# Browsers and bookmarks
+## Browsers and bookmarks
 * Create a series of bookmarks with your favorite messages and durations
 
-# Use PiHole
+## Use PiHole
 * Setup your local DNS such as onair.local for easy discovery
 
-# Possible Modifications and Upgrades
+## Possible Modifications and Upgrades
 * Pull in data from other API's
     - Current Temperature
     - Current Air Quality
