@@ -1,5 +1,7 @@
 # OnAir - a local area messaging system
 * On Air allows you to notify those around you when you shouldn't be disturbed
+* Installs on anything that can run Docker
+* Client is anything with a browser or One Thing on macOS
 * Version 1.0, be nice I'm a hobbyist
 
 ## Use Case
@@ -177,6 +179,7 @@
 ## Possible Modifications and Upgrades
 * Theme your own color schemes, not everyone likes red and green
 * Improve client UI/UX
+* Handle simultaneous admin and display multiple messages
 * Pull in data from other API's
     - Current Temperature
     - Current Air Quality
