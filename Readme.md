@@ -14,8 +14,8 @@
 
 ## Live Demo
 * Check out 
-* admin view [http://64zbit.com:5000/admin](http://64zbit.com:5000/admin)
-* client view [http://64zbit.com:5000](http://64zbit.com:5000)
+* admin view [https://onair.64zbit.com/admin](https://onair.64zbit.com/admin)
+* client view [https://onair.64zbit.com](https://onair.64zbit.com)
 * There's only one session so others may interrupt you
 * The server is in the America/Chicago timezone
 
@@ -55,7 +55,7 @@
 
 ### Start the session
 ```
-* Ex. [http://64zbit.com:5000/start?duration=60&message=Busy&standby=Available](http://64zbit.com:5000/start?duration=60&message=Busy&standby=Available)
+* Ex. onair.local/start?duration=60&message=Busy&standby=Available
 * onair.local:5000              :your server name and port
 * /start                        :is the route to start the session
 * ?duration=60                  :sets the session duration to 60 minutes
@@ -65,14 +65,14 @@
 
 ### Stop the session
 ```
-* Ex. [http://64zbit.com:5000/stop](http://64zbit.com:5000/stop)
-* Your server name and port     :onair.local:5000
+* Ex. onair.local:5000/stop
+* onair.local:5000              :your server name and port     
 * /stop                         :is the route to stop the session
 ```
 
 ### Status the session
 ```
-* Ex. [http://64zbit.com:5000/status](http://64zbit.com:5000/status)
+* Ex. onair.local:5000/status
 * /status                       :is the route to get a text based status of the system
 * Returns a string of the current status
 * Easy to parse on MacOS and display in your menubar with a script and One Thing
@@ -82,7 +82,7 @@
 ### Status the session with json
 ```
 * Ex. onair.local:5000/json
-* /json                         : is the route to get the full json status of the system
+* /json                         :is the route to get the full json status of the system
 * Returns a json object of the current status
 * Must be parsed to determine the current status
 * onAir == True, then in session, False then in stand by mode
@@ -100,7 +100,7 @@
     * Download with git
     * [Clone a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 * Raspberry Pi
-    * TBD
+    * Use Docker
 * Docker
     * [Install Docker](https://docs.docker.com/engine/install/)
     * Open a terminal window
@@ -111,7 +111,7 @@
     * on first run it will download all required files
     * to stop the onair server type ```docker-compose down```
     * now open a browser and go to your url port 5000/admin
-    * Ex. 64zbit.com:5000/admin
+    * Ex. onair.local:5000/admin
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
