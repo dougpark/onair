@@ -127,6 +127,8 @@
 * Setup your local DNS such as onair.local for easy discovery
 
 ## Possible Modifications and Upgrades
+* Theme your own color schemes, not everyone likes red and green
+* Improve client UI/UX
 * Pull in data from other API's
     - Current Temperature
     - Current Air Quality

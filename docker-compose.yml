@@ -1,20 +1,30 @@
 # docker-compose.yml
 version: '3'
 services:
-  flask:
-    container_name: flask
-    image: dnp-flask
+  onair:
+    container_name: onair
+    image: dnp-onair
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      # unbuffered allows pything print() to output to the docker logs
+      # unbuffered allows python print() to output to the docker logs
       PYTHONUNBUFFERED: 1
+      # set timezone enviornment
+      # to see a list of timezones on linux
+      #   ls /usr/share/zoneinfo/America/ 
+      TZ: America/Chicago
     volumes:
       # set local folder as app folder in the container
+      # this is the best advice for developing inside a container
       - "./:/app"
+      # set container timezone to host timezone folders
+      # if host is macOS or other non linux then wont work
+      # - /etc/timezone:/etc/timezone:ro
+      # - /etc/localtime:/etc/localtime:ro
     ports:
       # set host port 5000 to container port 5000
+      # change left 5000 to expose on a different host port
       - 5000:5000
     working_dir: /app/onair_app
     # start the command to run in the container
