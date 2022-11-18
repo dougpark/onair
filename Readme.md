@@ -112,27 +112,34 @@
 * [https://onair.64zbit.com/json](https://onair.64zbit.com/json)
 
 ## Server Installaton
-* Download onair
-    * Browse to [github/onair](https://github.com/dougpark/onair)
-    * Click the big green Code button
-    * Click the download ZIP button
-    * Expand and move the onair folder to your local computer
-    * or
-    * Download with git
-    * [Clone a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-* Raspberry Pi
-    * Use Docker
-* Docker
-    * [Install Docker](https://docs.docker.com/engine/install/)
-    * Open a terminal window
-    * cd to the onair folder
-    * ```cd onair```
-    * start docker
-    * ```docker-compose up -d```
-    * on first run it will download all required files
-    * to stop the onair server type ```docker-compose down```
-    * now open a browser and go to your url port 5000/admin
-    * Ex. onair.local:5000/admin
+### macOS or Windows
+* Browse to [github/onair](https://github.com/dougpark/onair)
+* Click the big green Code button
+* Click the download ZIP button
+* Expand and move the onair folder to your local computer
+* or
+* Download with git
+* [Clone a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+* Now follow the Docker instructions below to run the server
+### Raspberry Pi or other Linux
+* How to download the release from GitHub
+* ```curl -v -O -L https://github.com/dougpark/onair/archive/refs/tags/v1.0.tar.gz```
+
+* To unzip and untar and place in the current directory
+* The project folder will be automaticaly created first
+* ```tar -xvsf v1.0.tar.gz -C .``` Don't miss the final . after -C
+* Now follow the Docker instructions below to run the server
+### Docker
+* [Install Docker](https://docs.docker.com/engine/install/)
+* Open a terminal window
+* cd to the onair folder
+* ```cd onair```
+* start docker
+* ```docker-compose up -d```
+* on first run it will download all required files
+* to stop the onair server type ```docker-compose down```
+* now open a browser and go to your url port 5000/admin
+* Ex. onair.local:5000/admin
 
 ## Start the server in developer mode
 * in a bash or zsh terminal
