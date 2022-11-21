@@ -99,7 +99,6 @@ function initMessage() {
     console.log(payload)
     // var loggerElement = document.getElementById('logger')
     var dataElement = document.getElementById('displayMsg')
-    var dataElementC = document.getElementById('displayMsgC')
     var dataElementT = document.getElementById('sessionTime')
     var dataElementR = document.getElementById('sessionRemaining')
 
@@ -111,20 +110,20 @@ function initMessage() {
       dataElement.innerHTML = payload.sessionMessage
       dataElementT.innerHTML = payload.sessionNow
       dataElementR.innerHTML = payload.sessionRemaining
-      dataElement.classList.add("w3-red")
-      dataElement.classList.remove("w3-green")
-      dataElement.classList.remove("w3-black")
-      dataElementC.classList.add("w3-red")
-      dataElementC.classList.remove("w3-green")
+      $(".displayMsgC").addClass("w3-red").removeClass("w3-green w3-black")
+      
+      // dataElement.classList.add("w3-red")
+      // dataElement.classList.remove("w3-green")
+      // dataElement.classList.remove("w3-black")
     } else {
       dataElement.innerHTML = payload.standByMessage
-      dataElementT.innerHTML = ''
+      dataElementT.innerHTML = payload.sessionNow
       dataElementR.innerHTML = ''
-      dataElement.classList.add("w3-green")
-      dataElement.classList.remove("w3-red")
-      dataElement.classList.remove("w3-black")
-      dataElementC.classList.add("w3-green")
-      dataElementC.classList.remove("w3-red")
+      $(".displayMsgC").addClass("w3-green").removeClass("w3-red w3-black")
+      
+      // dataElement.classList.add("w3-green")
+      // dataElement.classList.remove("w3-red")
+      // dataElement.classList.remove("w3-black")
     }
     // loggerElement.appendChild(dataElement)
   })

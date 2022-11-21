@@ -26,7 +26,7 @@
       <script src="{{ url_for('static', filename='js/main.js')}}"></script>
     </head>
 
-    <body class=""> 
+    <!-- <body class=""> 
         
       <div class="w3-black full-height " style="margin-left: auto; margin-right: auto;  padding: 0"> 
             <div id="displayMsgC" class="full-height ">
@@ -35,11 +35,62 @@
              <div id="sessionRemaining" class="w3-center w3-padding-16" style="font-size: 4vw">Remaining</div>
          <div id="adminPanel" class=" w3-padding-24" style="display: {{ adminPanel }};">
              <div class="w3-center w3-padding-16">
-                <button id='startSession' class="w3-button w3-grey w3-round">On Air</button>
-                <button id='stopSession' class="w3-button w3-grey w3-round">Stop</button>
+                <button id='startSession' class="w3-button w3-grey ">On Air</button>
+                <button id='stopSession' class="w3-button w3-grey ">Stop</button>
              </div>
             </div>
         </div>         
-    </body>
+    </body> -->
 
+
+    <body>
+
+      <div class="w3-container " style=" margin-left: auto; margin-right: auto; width: 25em">
+          <!-- Navigation Bar -->
+          <div class="w3-bar w3-dark-grey">
+              <button class=" w3-bar-item w3-button tablink w3-bottombar w3-border-dark-grey"
+                  onclick="openTab(event,'ONAIR')">OnAir</button>
+              <button class="w3-bar-item w3-button tablink w3-bottombar w3-border-dark-grey"
+                  onclick="openTab(event,'Settings')" style="display: {{ adminPanel }};">Admin</button>
+          </div>
+  
+          <!-- OnAir Tab -->
+          <div id="ONAIR" class="w3-card-4 w3-dark-grey w3-center tab">
+            <h2 id="displayMsg" class="displayMsgC">Loading</h2>
+            <h2 id="sessionTime">Time</h2>
+            <h2 id="sessionRemaining">Remaining</h2>
+          </div>
+  
+          <!-- Unused Tab -->
+          <div id="unused" class="w3-card-4 tab"
+              style="display: none;">
+              <div class="w3-card-4 w3-dark-grey w3-center ">
+                  <div class="w3-container w3-dark-grey ">
+                      <h2 class="w3-text-white w3-center  ">Control</h2>
+                  </div>
+                  <div class="w3-container w3-center">
+                      <div class="w3-center">
+                          <h3 id="x_label">Label</h3>
+                          <h3 id="x_result" class="w3-text-black ">Result</h3>
+                      </div>
+                      <div class="w3-section">
+                          <button class="w3-button w3-green ">Accept</button>
+                          <button class="w3-button w3-red ">Decline</button>
+                      </div>
+                  </div>
+  
+              </div>
+          </div>
+  
+          <!-- Settings Tab -->
+          <div id="Settings" class="w3-card-4 w3-dark-grey w3-center tab" style="display: none;">
+            <h2 class="displayMsgC">OnAir</h2>
+            <div class=" w3-padding-16">
+              <button id='startSession' class="w3-button w3-blue ">On Air</button>
+              <button id='stopSession' class="w3-button w3-blue ">Stop</button>
+            </div>
+          </div>
+        </div>  
+  </body>
+  
 </html>
