@@ -110,7 +110,7 @@ function initMessage() {
       dataElement.innerHTML = payload.sessionMessage
       dataElementT.innerHTML = payload.sessionNow
       dataElementR.innerHTML = payload.sessionRemaining
-      $(".displayMsgC").addClass("w3-red").removeClass("w3-green w3-black")
+      $(".displayMsgC").addClass("w3-red").removeClass("dnp-dark-grey w3-black")
       
       // dataElement.classList.add("w3-red")
       // dataElement.classList.remove("w3-green")
@@ -119,7 +119,7 @@ function initMessage() {
       dataElement.innerHTML = payload.standByMessage
       dataElementT.innerHTML = payload.sessionNow
       dataElementR.innerHTML = ''
-      $(".displayMsgC").addClass("w3-green").removeClass("w3-red w3-black")
+      $(".displayMsgC").addClass("dnp-dark-grey").removeClass("w3-red w3-black")
       
       // dataElement.classList.add("w3-green")
       // dataElement.classList.remove("w3-red")

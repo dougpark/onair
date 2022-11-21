@@ -58,7 +58,7 @@ def get_session_status():
     session_status.onAir = onair_status
     session_status.sessionMessage = default_session_message
     session_status.sessionDuration = default_session_duration
-    session_status.sessionNow = now.strftime("%I:%M:%S %p")
+    session_status.sessionNow = now.strftime("%I:%M")
     session_status.sessionColor = default_session_color
     session_status.standByColor = default_standby_color
     

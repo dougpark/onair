@@ -1,5 +1,5 @@
 body {
- background: black;
+ background: #1e1e1e;
  color: white;
  
 }
@@ -15,6 +15,12 @@ html, body {
 .full-height-80 {
     height: 80%;
   }
+
+.dnp-dark-grey {
+  background-color: #262626;
+}
+
+
   
   
 /* PurpleAir Colors
