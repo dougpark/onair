@@ -1,0 +1,44 @@
+# docker-compose.yml
+version: '3'
+services:
+  onair:
+    container_name: onair
+    image: dnp-onair
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+    - proxy
+    environment:
+      - VIRTUAL_HOST=onair.64zbit.com
+      - VIRTUAL_PORT=5000
+      - LETSENCRYPT_HOST=onair.64zbit.com
+      - LETSENCRYPT_EMAIL=doug@64zbit.com
+      # unbuffered allows python print() to output to the docker logs
+      - PYTHONUNBUFFERED=1
+      # set timezone enviornment
+      # to see a list of timezones on linux
+      #   ls /usr/share/zoneinfo/America/ 
+      - TZ=America/Chicago
+      
+    volumes:
+      # set local folder as app folder in the container
+      # this is the best advice for developing inside a container
+      - "./:/app"
+      # set container timezone to host timezone folders
+      # if host is macOS or other non linux then wont work
+      # - /etc/timezone:/etc/timezone:ro
+      # - /etc/localtime:/etc/localtime:ro
+    ports:
+      # set host port 5000 to container port 5000
+      # change left 5000 to expose on a different host port
+      - 5000:5000
+    working_dir: /app/onair_app
+    # start the command to run in the container
+    command: python app.py 
+networks:
+  proxy:
+    external: true
+    name: nginx-proxy   
+    

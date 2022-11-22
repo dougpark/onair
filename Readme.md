@@ -2,7 +2,7 @@
 * On Air allows you to notify those around you when you shouldn't be disturbed
 * Server installs on anything that can run Docker
 * Client is anything with a browser or One Thing on macOS
-* Version 1.1, be nice I'm a hobbyist
+* Version 1.1.1, be nice I'm a hobbyist
 
 ## OnAir admin panel with settings
 ![OnAir](docs/onair_settings.png?raw=true "OnAir admin settings")
@@ -139,7 +139,7 @@
 
 * To unzip and untar and place in the current directory
 * The project folder will be automaticaly created first
-* ```tar -xvsf v1.0.tar.gz -C .``` Don't miss the final . after -C
+* ```tar -xvsf v1.1.tar.gz -C .``` Don't miss the final . after -C
 * Now follow the Docker instructions below to run the server
 ### Docker
 * [Install Docker](https://docs.docker.com/engine/install/)

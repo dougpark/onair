@@ -10,7 +10,7 @@
 
 # retrieve the status from the onair server
 # update with your server url and port number
-onair=$(curl -s http://frodo.local:5000/status) 
+onair=$(curl -s https://onair.64zbit.com/status) 
 
 # send status to One Thing
 open --background "one-thing:?text=${onair}"
