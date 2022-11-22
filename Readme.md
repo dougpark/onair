@@ -1,8 +1,8 @@
 # OnAir - a local area messaging system
 * On Air allows you to notify those around you when you shouldn't be disturbed
-* Installs on anything that can run Docker
+* Server installs on anything that can run Docker
 * Client is anything with a browser or One Thing on macOS
-* Version 1.0, be nice I'm a hobbyist
+* Version 1.1, be nice I'm a hobbyist
 
 ## Use Case
 * For example:
@@ -36,6 +36,7 @@
 * This url allows you to start and stop the session through the web interface
 * Ex. onair.local/admin
 * A stop and start button are displayed on the screen
+* Settings to adjust messages and duration
 
 ## Defaults
 ```
@@ -113,15 +114,17 @@
 
 ## Server Installaton
 ### macOS or Windows
-* Browse to [github/onair](https://github.com/dougpark/onair)
-* Click the big green Code button
-* Click the download ZIP button
+* Browse to [github/onair](https://github.com/dougpark/onair/releases)
+* Scroll to find the latest release
+* Click to download the Source Code zip or tar file
 * Expand and move the onair folder to your local computer
 * or
 * Download with git
 * [Clone a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 * Now follow the Docker instructions below to run the server
 ### Raspberry Pi or other Linux
+* Browse to [github/onair](https://github.com/dougpark/onair/releases)
+* Copy the link to the latest release
 * How to download the release from GitHub
 * ```curl -v -O -L https://github.com/dougpark/onair/archive/refs/tags/v1.0.tar.gz```
 
