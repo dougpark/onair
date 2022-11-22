@@ -4,10 +4,13 @@
 * Client is anything with a browser or One Thing on macOS
 * Version 1.1, be nice I'm a hobbyist
 
-# OnAir admin panel with settings
+## OnAir admin panel with settings
 ![OnAir](docs/onair_settings.png?raw=true "OnAir admin settings")
 
-# OnAir working on macOS with One Thing
+## OnAir status view
+![OnAir](docs/onair_status.png?raw=true "OnAir status view")
+
+## OnAir working on macOS with One Thing
 ![OnAir](docs/onair_menubar.png?raw=true "OnAir in menu bar")
 
 ## Use Case
