@@ -4,6 +4,12 @@
 * Client is anything with a browser or One Thing on macOS
 * Version 1.1, be nice I'm a hobbyist
 
+# OnAir admin panel with settings
+![OnAir](docs/onair_settings.png?raw=true "OnAir admin settings")
+
+# OnAir working on macOS with One Thing
+![OnAir](docs/onair_menubar.png?raw=true "OnAir in menu bar")
+
 ## Use Case
 * For example:
 * When you are recording a podcast
@@ -126,7 +132,7 @@
 * Browse to [github/onair](https://github.com/dougpark/onair/releases)
 * Copy the link to the latest release
 * How to download the release from GitHub
-* ```curl -v -O -L https://github.com/dougpark/onair/archive/refs/tags/v1.0.tar.gz```
+* ```curl -v -O -L https://github.com/dougpark/onair/archive/refs/tags/v1.1.tar.gz```
 
 * To unzip and untar and place in the current directory
 * The project folder will be automaticaly created first
