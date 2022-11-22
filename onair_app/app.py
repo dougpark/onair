@@ -58,7 +58,7 @@ def get_session_status():
     session_status.onAir = onair_status
     session_status.sessionMessage = default_session_message
     session_status.sessionDuration = default_session_duration
-    session_status.sessionNow = now.strftime("%I:%M")
+    session_status.sessionNow = now.strftime("%-I:%M") # now.strftime("%a %b %d %-I:%M")
     session_status.sessionColor = default_session_color
     session_status.standByColor = default_standby_color
     
@@ -71,7 +71,7 @@ def start_onair_session():
     logging.info('start_onair_session called')
     onair_status = True
     session_start_time = datetime.now()
-    broadcast_bg_thread = dnp_util.start_background_thread(1, broadcast_status)
+    # broadcast_bg_thread = dnp_util.start_background_thread(1, broadcast_status)
     payload = get_session_status()
     socketio.emit('update', payload, broadcast=True)
 
@@ -80,7 +80,7 @@ def stop_onair_session():
     global onair_status
     logging.info('stop_onair_session called')
     onair_status = False
-    broadcast_bg_thread.terminate() 
+    # broadcast_bg_thread.terminate() 
     payload = get_session_status()
     socketio.emit('update', payload, broadcast=True)
     return 
@@ -150,6 +150,22 @@ def start_session(data):
 def stop_session(data):
     stop_onair_session()
 
+# process the savesettings request, updates global settings
+@socketio.on('savesettings')
+def save_settings(received):
+    logging.info('save_settings called')
+    data=DotMap(received) 
+    logging.info(data)
+    global default_session_message, default_standby_message, default_session_duration
+    if (data.message):
+        default_session_message = data.message
+    if (data.standby):
+        default_standby_message = data.standby
+    if (data.duration):
+        default_session_duration = data.duration
+    payload = get_session_status()
+    emit('update', payload, broadcast=True)
+
 # process the getstatus request, does not change status
 @socketio.on('getstatus')
 def get_status(data):
@@ -160,8 +176,11 @@ def get_status(data):
 # process connection request
 @socketio.on('connect')
 def on_connect():
+    global broadcast_bg_thread
     logging.info('on_connect called')
     payload = dict(data='Connection ack from server')
+    if (not broadcast_bg_thread):
+        broadcast_bg_thread = dnp_util.start_background_thread(1, broadcast_status)
     emit('connectResp', payload)
 
 # not used
