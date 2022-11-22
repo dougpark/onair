@@ -1,88 +1,145 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <!-- Required meta tags -->
-      <meta charset = "utf-8"> 
-      <meta name = "apple-mobile-web-app-capable" content = "yes" /> 
-      <meta name = "apple-mobile-web-app-status-bar-style" content = "black" /> 
-      <meta name = "apple-mobile-web-app-title" content = "OnAir"> 
-      <meta name = "viewport" content = "width=device-width, initial-scale=1, shrink-to-fit=no" >
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="OnAir" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-      <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
-      <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
-      <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
-      <link rel="manifest" href="static/favicon/site.webmanifest">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="static/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="static/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="static/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="static/favicon/site.webmanifest" />
 
+    <!-- w3.css -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <!-- Google Material Symbols -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <!-- Local Styles -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/style.css')}}"
+    />
 
+    <title>OnAir</title>
+    <!-- JQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      vintegrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <!-- Socket.io -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+    <!-- Local Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+  </head>
 
-      <!-- w3.css -->
-      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-      <!-- Google Material Symbols -->
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-      <!-- Local Styles -->
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')}}" />
+  <body>
+    <div
+      class="w3-container"
+      style="margin-left: auto; margin-right: auto; width: 25em"
+    >
+      <!-- Navigation Bar -->
+      <div class="w3-bar dnp-dark-grey" style="display: none">
+        <button
+          class="w3-bar-item w3-button tablink"
+          onclick="openTab(event,'ONAIR')"
+        >
+          OnAir
+        </button>
+        <button
+          class="w3-bar-item w3-button tablink"
+          onclick="openTab(event,'Settings')"
+        >
+          Admin
+        </button>
+      </div>
 
-      <title>OnAir</title>
-      <!-- JQuery -->
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"vintegrity = "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin = "anonymous" > </script>
-      <!-- Socket.io -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-      <!-- Local Scripts -->
-      <script src="{{ url_for('static', filename='js/main.js')}}"></script>
-    </head>
+      <!-- OnAir Tab -->
+      <div id="ONAIR" class="w3-card-4 dnp-dark-grey w3-center tab">
+        <h2 class="displayMsgC" id="displayMsg"></h2>
+        <h2 id="sessionTime"></h2>
+        <h2 id="sessionRemaining"></h2>
+      </div>
 
-    <body>
-      <div class="w3-container " style=" margin-left: auto; margin-right: auto; width: 25em">
-          <!-- Navigation Bar -->
-          <div class="w3-bar dnp-dark-grey" style="display: none;">
-              <button class=" w3-bar-item w3-button tablink "
-                  onclick="openTab(event,'ONAIR')">OnAir</button>
-              <button class="w3-bar-item w3-button tablink "
-                  onclick="openTab(event,'Settings')">Admin</button>
-          </div>
-  
-          <!-- OnAir Tab -->
-          <div id="ONAIR" class="w3-card-4 dnp-dark-grey w3-center tab">
-            <h2 class="displayMsgC" id="displayMsg"></h2>
-            <h2 id="sessionTime"></h2>
-            <h2 id="sessionRemaining"></h2>
-          </div>
-  
-
-  
-          <!-- Admin Tab -->
-          <div id="Admin" class="w3-panel w3-padding-16 w3-margin-top dnp-dark-grey w3-center tab" style="display: {{ adminPanel }};">
-            <!-- <h2 class="displayMsgC">OnAir</h2> -->
-            <div class=" ">
-              <button id='startSession' class="w3-button w3-blue "><span class="material-symbols-outlined">mic</span> On Air</button>
-              <button id='stopSession' class="w3-button w3-blue"><span class="material-symbols-outlined">mic_off</span> Off Air</button>
-              <button id='startSettings' class="w3-button w3-blue" onclick="toggleCard('settings')"><span class="material-symbols-outlined">settings</span></button>
-            </div>
-          </div>
-        
-        <!-- Settings Tab -->
-        <div id="settings" class="w3-panel w3-center w3-margin-top dnp-dark-grey  tab" style="display: none;">
-          <div class="w3-container dnp-dark-grey-3" style="text-align: left">
-            <h3>Settings</h3>
-          </div>
-          
-          <form class="w3-container">
-            <p>
-            <label class="w3-left">On Air Message</label>
-            <input id="saveOnAirMessage" class="w3-input" type="text"></p>
-            <p>
-            <label class="w3-left">Stand By Message</label>
-            <input id="saveStandByMessage" class="w3-input" type="text"></p>
-            <p>
-            <label class="w3-left">Duration (Minutes)</label>
-            <input id="saveDuration" class="w3-input" type="text"></p>
-          </form>
-          <div class="w3-section w3-center">
-            <button id="saveSettingsBtn" class="w3-button w3-blue">Save</button>
-        </div>
+      <!-- Admin Tab -->
+      <div
+        id="Admin"
+        class="w3-panel w3-padding-16 w3-margin-top dnp-dark-grey w3-center tab"
+        style="display: {{ adminPanel }};"
+      >
+        <div class="">
+          <button id="startSession" class="w3-button w3-blue">
+            <span class="material-symbols-outlined">mic</span> On Air
+          </button>
+          <button id="stopSession" class="w3-button w3-blue">
+            <span class="material-symbols-outlined">mic_off</span> Off Air
+          </button>
+          <button
+            id="startSettings"
+            class="w3-button w3-blue"
+            onclick="toggleCard('settings')"
+          >
+            <span class="material-symbols-outlined">settings</span>
+          </button>
         </div>
       </div>
-        
+
+      <!-- Settings Tab -->
+      <div
+        id="settings"
+        class="w3-panel w3-center w3-margin-top dnp-dark-grey tab"
+        style="display: none"
+      >
+        <div class="w3-container dnp-dark-grey-3" style="text-align: left">
+          <h3>Settings</h3>
+        </div>
+
+        <form class="w3-container">
+          <p>
+            <label class="w3-left">On Air Message</label>
+            <input id="saveOnAirMessage" class="w3-input" type="text" />
+          </p>
+          <p>
+            <label class="w3-left">Stand By Message</label>
+            <input id="saveStandByMessage" class="w3-input" type="text" />
+          </p>
+          <p>
+            <label class="w3-left">Duration (Minutes)</label>
+            <input id="saveDuration" class="w3-input" type="text" />
+          </p>
+        </form>
+        <div class="w3-section w3-center">
+          <button id="saveSettingsBtn" class="w3-button w3-blue">Save</button>
+        </div>
+      </div>
+    </div>
   </body>
-  
 </html>
